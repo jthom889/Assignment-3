@@ -17,9 +17,7 @@ public class Main extends Application
 	{
 		StoreMenu s = new StoreMenu(null);
 		SBGUI gui = new SBGUI(primaryStage, s);
-
 	}
-	
 	
 	public static void main(String[] args) 
 	{
