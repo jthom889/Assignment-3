@@ -10,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
@@ -27,6 +28,37 @@ public class GUIController implements Initializable{
 	private Button removeToy;
 	@FXML
 	private ListView<String> rtList;
+	@FXML
+	private ChoiceBox<String> category;
+	@FXML
+	private TextField addSN;
+	@FXML
+	private TextField addName;
+	@FXML
+	private TextField addBrand;
+	@FXML
+	private TextField addPrice;
+	@FXML
+	private TextField addCount;
+	@FXML
+	private TextField addAge;
+	@FXML 
+	private TextField figClass;
+	@FXML 
+	private TextField animalMat;
+	@FXML 
+	private TextField animalSize;
+	@FXML 
+	private TextField puzzleType;
+	@FXML 
+	private TextField bgMin;
+	@FXML 
+	private TextField bgCMax;
+	@FXML 
+	private TextField bgDesign;
+	@FXML
+	private Button addSave;
+	
 	
 	StoreMenu st;
 	ArrayList<Toys> toys;
@@ -44,6 +76,10 @@ public class GUIController implements Initializable{
 		for(Toys t: toys) {
 			rtList.getItems().add(t.toString());
 		}
+		
+		category.getItems().addAll("Figures", "Animal", "Puzzle", "Board Game");
+		
+		
 		
 	}
 	
