@@ -148,7 +148,16 @@
                         </Label>
                         <TextField fx:id="animalSize" layoutX="564.0" layoutY="121.0" prefHeight="25.0" prefWidth="74.0" />
                         <TextField fx:id="animalMat" layoutX="564.0" layoutY="83.0" prefHeight="25.0" prefWidth="74.0" />
-                        <Button fx:id="addSave" layoutX="143.0" layoutY="360.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="86.0" text="Button" />
+                        <Button fx:id="addSave" layoutX="121.0" layoutY="355.0" mnemonicParsing="false" onAction="#addClicked" prefHeight="25.0" prefWidth="130.0" text="Save">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Button>
+                        <Label fx:id="addError" alignment="CENTER" contentDisplay="CENTER" layoutX="121.0" layoutY="392.0" prefWidth="130.0" textAlignment="CENTER">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
                      </children></AnchorPane>
             </content>
           </Tab>
