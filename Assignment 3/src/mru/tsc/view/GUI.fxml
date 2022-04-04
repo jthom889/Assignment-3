@@ -8,14 +8,15 @@
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="450.0" prefWidth="673.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mru.tsc.view.GUIController">
+<AnchorPane prefHeight="450.0" prefWidth="673.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mru.tsc.view.GUIController">
    <children>
-      <TabPane layoutX="1.0" layoutY="1.0" prefHeight="475.0" prefWidth="679.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane layoutX="1.0" layoutY="1.0" prefHeight="475.0" prefWidth="1069.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="Home">
             <content>
@@ -77,7 +78,7 @@
           </Tab>
           <Tab text="Add Toy">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="379.0" prefWidth="679.0">
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="426.0" prefWidth="754.0">
                      <children>
                         <Label layoutX="16.0" layoutY="21.0" prefHeight="21.0" prefWidth="197.0" text="Enter New Toy Information">
                            <font>
@@ -158,6 +159,7 @@
                               <Font size="14.0" />
                            </font>
                         </Label>
+                        <TextArea fx:id="displayArea" layoutX="678.0" layoutY="33.0" prefHeight="342.0" prefWidth="342.0" />
                      </children></AnchorPane>
             </content>
           </Tab>
