@@ -20,7 +20,16 @@ import mru.tsc.model.Puzzles;
 
 public class StoreMenu {
 	//file name
-	ArrayList<Toys> toys;
+	private ArrayList<Toys> toys;
+	
+	/**
+	 * getter for arrayList
+	 * @return toys
+	 */
+	public ArrayList<Toys> getToys() {
+		return toys;
+	}
+
 	String file;
 	
 	/**
