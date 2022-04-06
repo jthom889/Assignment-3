@@ -26,7 +26,7 @@
                               <Font size="15.0" />
                            </font>
                         </Label>
-                        <RadioButton fx:id="readSerialNo" layoutX="11.0" layoutY="70.0" mnemonicParsing="false" onAction="#EditSearchType" text="Serial Number">
+                        <RadioButton fx:id="readSerialNo" layoutX="11.0" layoutY="70.0" mnemonicParsing="false" onAction="#EditSearchType" text="Serial Number" toggleGroup="$Search">
                            <font>
                               <Font size="10.0" />
                            </font>
@@ -34,21 +34,15 @@
                               <ToggleGroup fx:id="Search" />
                            </toggleGroup>
                         </RadioButton>
-                        <RadioButton fx:id="readName" layoutX="103.0" layoutY="71.0" mnemonicParsing="false" onAction="#EditSearchType" text="Name">
+                        <RadioButton fx:id="readName" layoutX="103.0" layoutY="71.0" mnemonicParsing="false" onAction="#EditSearchType" text="Name" toggleGroup="$Search">
                            <font>
                               <Font size="10.0" />
                            </font>
-                           <toggleGroup>
-                              <ToggleGroup fx:id="Search" />
-                           </toggleGroup>
                         </RadioButton>
-                        <RadioButton fx:id="readType" layoutX="161.0" layoutY="67.0" mnemonicParsing="false" onAction="#EditSearchType" prefHeight="23.0" prefWidth="55.0" text="Type">
+                        <RadioButton fx:id="readType" layoutX="161.0" layoutY="67.0" mnemonicParsing="false" onAction="#EditSearchType" prefHeight="23.0" prefWidth="55.0" text="Type" toggleGroup="$Search">
                            <font>
                               <Font size="10.0" />
                            </font>
-                           <toggleGroup>
-                              <ToggleGroup fx:id="Search" />
-                           </toggleGroup>
                         </RadioButton>
                         <Label layoutX="14.0" layoutY="44.0" prefHeight="17.0" prefWidth="135.0" text="Search Inventory:">
                            <font>
@@ -99,7 +93,7 @@
                         <Label layoutX="22.0" layoutY="277.0" prefHeight="17.0" prefWidth="108.0" text="Avaliable-count" />
                         <TextField fx:id="addSN" layoutX="121.0" layoutY="108.0" prefHeight="25.0" prefWidth="130.0" />
                         <Label layoutX="340.0" layoutY="41.0" prefHeight="17.0" prefWidth="93.0" text="Figure" />
-                        <ChoiceBox fx:id="category" layoutX="121.0" layoutY="70.0" prefHeight="25.0" prefWidth="130.0" />
+                        <ChoiceBox fx:id="category" layoutX="121.0" layoutY="70.0" onAction="#selectToyType" prefHeight="25.0" prefWidth="130.0" />
                         <Label layoutX="273.0" layoutY="87.0" prefHeight="17.0" prefWidth="92.0" text="Classification">
                            <font>
                               <Font size="11.0" />
