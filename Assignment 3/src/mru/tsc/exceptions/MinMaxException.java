@@ -4,7 +4,7 @@ public class MinMaxException extends Exception {
 	/**
 	 * @param message
 	 */
-	public MinMaxException(String message) {
-		super(message);
+	public MinMaxException() {
+		super("Minimum players must be less than Maximum players");
 	}
 }

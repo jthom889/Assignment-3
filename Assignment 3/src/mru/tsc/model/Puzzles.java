@@ -1,39 +1,9 @@
 package mru.tsc.model;
 
-
-import mru.tsc.exceptions.PuzzleException;
-
 public class Puzzles extends Toys {
-	 //puzzleType variable declared
-	PuzzleType puzzleType;
+	 
+	String puzzleType;
 	
-	/**
-	 * used enum for what type of puzzle it is which is
-	 * either Mechanical, Cryptic, Logic, Trivia, or Riddle.
-	 * value variable declared with PuzzleType taking value as parameter
-	 * @author Jonah
-	 *
-	 */
-    enum PuzzleType {
-        Mechanical("Mechanical"), 
-        Cryptic("Cryptic"), 
-        Logic("Logic"), 
-        Trivia("Trivia"),
-        Riddle("Riddle");
-        
-        String value;
-        private PuzzleType(String value) {
-            this.value = value;
-        }
-        
-        @Override
-        /**
-         * Overriding toString method that returns value
-         */
-        public String toString() {
-            return this.value;
-        }
-    } 
     
     /**
      * this constructor creates the toy of type figure
@@ -47,27 +17,10 @@ public class Puzzles extends Toys {
      * @param ageGroup - tells what age group is for toy
      * @param puzzleType - tells user what type of puzzle it is
      */
-    public Puzzles(long s, String n, String b, double p, int aC, String aA, char puzzleType) throws PuzzleException {
+    public Puzzles(String s, String n, String b, double p, int aC, int aA, String puzzleT) {
         super(s, n, b, p, aC, aA);
-    	switch (puzzleType) {
-    	 case 'M':
-             this.puzzleType = PuzzleType.Mechanical;
-             break;
-         case 'T':
-             this.puzzleType = PuzzleType.Trivia;
-             break;
-         case 'C':
-             this.puzzleType = PuzzleType.Cryptic;
-             break;
-         case 'L':
-             this.puzzleType = PuzzleType.Logic;
-             break;
-         case 'R':
-             this.puzzleType = PuzzleType.Riddle;
-             break;
-         default:
-        	 throw new PuzzleException("Puzzle has to be of type M, T, C, L, or R");
-    }
+        puzzleType = puzzleT;
+    	
     }
 
     @Override
@@ -75,7 +28,8 @@ public class Puzzles extends Toys {
      * Overriding toString method that returns and tells user puzzle and puzzle type 
      */
     public String toString() {
-        return "Category: Puzzle, " + super.toString() + ", Puzzle Type: " + this.puzzleType;
+    	return "Puzzle = SN:" + serialNo + ", Name:" + name + ", Brand:" + brand + ", Price:" + price + ", Available:"
+				+ avaliableCount + ", Age Group:" + ageAppropriate + ", puzzleType:" + puzzleType;
     }
     
     /**

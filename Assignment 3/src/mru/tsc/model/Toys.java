@@ -8,12 +8,12 @@ package mru.tsc.model;
 public abstract class Toys {
 
 	//parameters of the toys object
-	private long serialNo;
-	private String name;
-	private String brand;
-	private double price;
-	private int avaliableCount;
-	private String ageAppropriate;
+	 String serialNo;
+	 String name;
+	 String brand;
+	 double price;
+	 int avaliableCount;
+	 int ageAppropriate;
 	 
 	
 	/**
@@ -25,7 +25,7 @@ public abstract class Toys {
 	 * @param avaliableCount is the number of toys available
 	 * @param ageAppropriate is the minimum age the toy should be played with
 	 */
-	public Toys(long serialNo, String name, String brand, double price, int avaliableCount, String ageAppropriate) {
+	public Toys(String serialNo, String name, String brand, double price, int avaliableCount, int ageAppropriate) {
 		 this.serialNo = serialNo;
 	     this.name = name;
 	     this.brand = brand;
@@ -38,8 +38,12 @@ public abstract class Toys {
 	 * getter for serial number
 	 * @return
 	 */
-	public long getSerialNo() {
+	public String getSerialNo() {
 		return serialNo;
+	}
+	
+	public void setSerialNo(String sn) {
+		serialNo = sn;
 	}
 
 	/**
@@ -49,6 +53,10 @@ public abstract class Toys {
 	public String getName() {
 		return name;
 	}
+	
+	public void setName(String toyName) {
+		this.name = toyName;
+	}
 
 	/**
 	 * getter for the brand
@@ -56,6 +64,10 @@ public abstract class Toys {
 	 */
 	public String getBrand() {
 		return brand;
+	}
+	
+	public void setBrand( String toyBrand) {
+		this.brand = toyBrand;
 	}
 
 	/**
@@ -65,6 +77,10 @@ public abstract class Toys {
 	public double getPrice() {
 		return price;
 	}
+	
+	public void setPrice(double price) {
+		this.price = price;
+	}
 
 	/**
 	 * getter for toy count
@@ -72,6 +88,10 @@ public abstract class Toys {
 	 */
 	public int getAvaliableCount() {
 		return avaliableCount;
+	}
+	
+	public void setAvaliableCount(int count) {
+		this.avaliableCount = count;
 	}
 	
 	/**
@@ -85,8 +105,12 @@ public abstract class Toys {
 	 * getter for the age the toy should be sold to
 	 * @return
 	 */
-	public String getAgeAppropriate() {
+	public int getAgeAppropriate() {
 		return ageAppropriate;
+	}
+	
+	public void setAgeAppropriate(int ageGroup) {
+		this.ageAppropriate = ageGroup;
 	}
 	
 	@Override

@@ -4,7 +4,7 @@ public class PriceException extends Exception {
 	/**
 	 * @param message
 	 */
-	public PriceException(String message) {
-		super(message);
+	public PriceException() {
+		super("Price is not a positive number");
 	}
 }

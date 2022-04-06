@@ -14,7 +14,7 @@ public class SBGUI
 		try 
 		{
 			Parent root = (Parent)FXMLLoader.load(getClass().getResource("GUI.fxml"));
-			Scene scene = new Scene(root,800,600);
+			Scene scene = new Scene(root,1100,500);
 			
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);

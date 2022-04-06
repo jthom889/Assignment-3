@@ -4,7 +4,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -27,51 +26,57 @@
                               <Font size="15.0" />
                            </font>
                         </Label>
-                        <RadioButton layoutX="11.0" layoutY="70.0" mnemonicParsing="false" text="Serial Number">
+                        <RadioButton fx:id="readSerialNo" layoutX="11.0" layoutY="70.0" mnemonicParsing="false" onAction="#EditSearchType" text="Serial Number">
                            <font>
                               <Font size="10.0" />
                            </font>
                            <toggleGroup>
-                              <ToggleGroup fx:id="search" />
+                              <ToggleGroup fx:id="Search" />
                            </toggleGroup>
                         </RadioButton>
-                        <RadioButton layoutX="103.0" layoutY="71.0" mnemonicParsing="false" text="Name" toggleGroup="$search">
+                        <RadioButton fx:id="readName" layoutX="103.0" layoutY="71.0" mnemonicParsing="false" onAction="#EditSearchType" text="Name">
                            <font>
                               <Font size="10.0" />
                            </font>
+                           <toggleGroup>
+                              <ToggleGroup fx:id="Search" />
+                           </toggleGroup>
                         </RadioButton>
-                        <RadioButton layoutX="161.0" layoutY="67.0" mnemonicParsing="false" prefHeight="23.0" prefWidth="55.0" text="Type" toggleGroup="$search">
+                        <RadioButton fx:id="readType" layoutX="161.0" layoutY="67.0" mnemonicParsing="false" onAction="#EditSearchType" prefHeight="23.0" prefWidth="55.0" text="Type">
                            <font>
                               <Font size="10.0" />
                            </font>
+                           <toggleGroup>
+                              <ToggleGroup fx:id="Search" />
+                           </toggleGroup>
                         </RadioButton>
                         <Label layoutX="14.0" layoutY="44.0" prefHeight="17.0" prefWidth="135.0" text="Search Inventory:">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <TextField layoutX="126.0" layoutY="107.0">
+                        <TextField fx:id="SNText" layoutX="126.0" layoutY="107.0">
                            <font>
                               <Font size="10.0" />
                            </font>
                         </TextField>
                         <Label layoutX="11.0" layoutY="106.0" prefHeight="24.0" prefWidth="114.0" text="Serial Number (SN)" textFill="#d42828" />
-                        <ListView layoutX="264.0" layoutY="25.0" prefHeight="352.0" prefWidth="404.0" />
                         <Button layoutX="433.0" layoutY="393.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="66.0" text="Buy" />
-                        <TextField layoutX="126.0" layoutY="170.0">
+                        <TextField fx:id="typeText" layoutX="126.0" layoutY="170.0">
                            <font>
                               <Font size="10.0" />
                            </font>
                         </TextField>
-                        <TextField layoutX="126.0" layoutY="137.0">
+                        <TextField fx:id="nameText" layoutX="126.0" layoutY="137.0">
                            <font>
                               <Font size="10.0" />
                            </font>
                         </TextField>
                         <Label layoutX="11.0" layoutY="137.0" prefHeight="24.0" prefWidth="114.0" text="Name" textFill="#747474" />
                         <Label layoutX="11.0" layoutY="169.0" prefHeight="24.0" prefWidth="114.0" text="Type" textFill="#747474" />
-                        <Button layoutX="149.0" layoutY="246.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="58.0" text="Clear" />
-                        <Button layoutX="52.0" layoutY="247.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="60.0" text="Search" />
+                        <Button fx:id="Clearbtn" layoutX="149.0" layoutY="246.0" mnemonicParsing="false" onAction="#Resetfields" prefHeight="33.0" prefWidth="58.0" text="Clear" />
+                        <Button fx:id="Searchbtn" layoutX="52.0" layoutY="247.0" mnemonicParsing="false" onAction="#SearchToy" prefHeight="31.0" prefWidth="60.0" text="Search" />
+                        <TextArea fx:id="searchOutput" layoutX="312.0" layoutY="64.0" prefHeight="298.0" prefWidth="679.0" />
                      </children>
                   </AnchorPane>
             </content>
@@ -141,7 +146,7 @@
                         <TextField fx:id="figClass" layoutX="340.0" layoutY="83.0" prefHeight="25.0" prefWidth="74.0" />
                         <TextField fx:id="bgMin" layoutX="596.0" layoutY="234.0" prefHeight="25.0" prefWidth="40.0" />
                         <TextField fx:id="bgDesign" layoutX="564.0" layoutY="306.0" prefHeight="25.0" prefWidth="74.0" />
-                        <TextField fx:id="bgCMax" layoutX="596.0" layoutY="265.0" prefHeight="25.0" prefWidth="40.0" />
+                        <TextField fx:id="bgMax" layoutX="596.0" layoutY="265.0" prefHeight="25.0" prefWidth="40.0" />
                         <Label layoutX="472.0" layoutY="125.0" prefHeight="17.0" prefWidth="92.0" text="Size">
                            <font>
                               <Font size="11.0" />
@@ -149,7 +154,7 @@
                         </Label>
                         <TextField fx:id="animalSize" layoutX="564.0" layoutY="121.0" prefHeight="25.0" prefWidth="74.0" />
                         <TextField fx:id="animalMat" layoutX="564.0" layoutY="83.0" prefHeight="25.0" prefWidth="74.0" />
-                        <Button fx:id="addSave" layoutX="121.0" layoutY="355.0" mnemonicParsing="false" onAction="#addClicked" prefHeight="25.0" prefWidth="130.0" text="Save">
+                        <Button fx:id="addSave" layoutX="121.0" layoutY="355.0" mnemonicParsing="false" onAction="#errorCheck" prefHeight="25.0" prefWidth="130.0" text="Save">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -178,8 +183,8 @@
                            </font>
                         </Label>
                         <TextField fx:id="rtSN" layoutX="68.0" layoutY="156.0" />
-                        <Button fx:id="removeToy" layoutX="103.0" layoutY="238.0" mnemonicParsing="false" onAction="#removeCLicked" prefHeight="33.0" prefWidth="80.0" text="Remove" />
-                        <ListView fx:id="rtList" layoutX="242.0" layoutY="22.0" prefHeight="412.0" prefWidth="424.0" />
+                        <Button fx:id="removeToy" layoutX="103.0" layoutY="238.0" mnemonicParsing="false" onAction="#RemoveToy" prefHeight="33.0" prefWidth="80.0" text="Remove" />
+                        <TextArea fx:id="rtList" layoutX="259.0" layoutY="54.0" prefHeight="319.0" prefWidth="757.0" />
                      </children></AnchorPane>
               </content>
             </Tab>

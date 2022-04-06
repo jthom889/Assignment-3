@@ -1,17 +1,12 @@
 package mru.tsc.controller;
 
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import mru.tsc.model.Toys;
-import mru.tsc.exceptions.MinMaxException;
-import mru.tsc.exceptions.PriceException;
 import mru.tsc.model.Animals;
 import mru.tsc.model.BoardGames;
 import mru.tsc.model.Figures;
@@ -20,482 +15,332 @@ import mru.tsc.model.Puzzles;
 
 public class StoreMenu {
 	//file name
-	private ArrayList<Toys> toys;
+	private final String FILE_PATH = "res/text.txt" ;
+	private ArrayList<Toys> toys = new ArrayList<>();
+	Scanner in = new Scanner(System.in);
 	
-	/**
-	 * getter for arrayList
-	 * @return toys
-	 */
-	public ArrayList<Toys> getToys() {
-		return toys;
-	}
-
-	String file;
 	
 	/**
 	 * Class constructor
 	 * Hold the new file
 	 * @param file the current file
 	 */
-	public StoreMenu(String file) {
-		toys = new ArrayList<>();
-		this.loadData(file);
-		this.file = file;
+	public StoreMenu() throws Exception {
+		loadData();
 	}
 	
 	/**
 	 * Method that loads all information
 	 * @param file the current file
+	 * @throws Exception 
 	 */
-	public void loadData(String file) {
+	public void loadData() throws Exception {
 			
-		//declare variables
-		String serialNumber = "";
-		String line = "";
-		String name = "";
-		String brand = "";
-		double price = 0.0;
-		int numAvailable = 0;
-		String ageAppropriate = "";
-		char firstChar = 'a';
-		try {
-			FileReader myReader = new FileReader(file);
-			Scanner in = new Scanner(myReader);
-			while (in.hasNext()) {
-				line = in.nextLine();
-				String [] tokens = line.split(";");
-				serialNumber = tokens[0];
-				firstChar = serialNumber.charAt(0);
-				name = tokens[1];
-				brand = tokens[2];
-				price = Double.parseDouble(tokens[3]);
-				numAvailable = Integer.parseInt(tokens[4]);
-				ageAppropriate = tokens[5];
-				switch (firstChar) {
-				case '0':
-				case '1':
-					toys.add(new Figures(Long.parseLong(serialNumber), name, brand, price, numAvailable, ageAppropriate, tokens[6].charAt(0)));
-					break;
-				case '2':
-				case '3':
-					toys.add(new Animals(Long.parseLong(serialNumber), name, brand, price, numAvailable, ageAppropriate, tokens[6],tokens[7].charAt(0)));
-					break;
-				case '4':
-				case '5':
-				case '6':
-					toys.add(new Puzzles(Long.parseLong(serialNumber), name, brand, price, numAvailable, ageAppropriate, tokens[6].charAt(0)));
-					break;
-				case '7':
-				case '8':
-				case '9':
-					toys.add(new BoardGames(Long.parseLong(serialNumber), name, brand, price, numAvailable, ageAppropriate, tokens[6], tokens[7]));
-					break;
-				default:
-					System.out.println("WARNING: Invalid serial number");
+		File db = new File(FILE_PATH);
+		String currentLine;
+		String[] splittedLine;
+
+		// reading the file
+		if (db.exists()) {
+			Scanner fileReader = new Scanner(db);
+
+			while (fileReader.hasNextLine()) {
+
+				currentLine = fileReader.nextLine();
+				splittedLine = currentLine.split(";");
+				char SN = splittedLine[0].charAt(0);
+
+				if (toyType(SN) == "F") {
+					Toys Figure = new Figures(splittedLine[0], splittedLine[1], splittedLine[2],
+							Double.parseDouble(splittedLine[3]), Integer.parseInt(splittedLine[4]),
+							Integer.parseInt(splittedLine[5]), splittedLine[6]);
+					toys.add(Figure);
+
 				}
-			}
-			in.close();
-		} catch (IOException ex) {
-			System.out.println("ERROR: Reading File " + file);
-		} catch (Exception e) {
-			System.out.println("ERROR: Reading line " + line);
-		}
-	}
-	
-	/**
-	 * This method is part of the menu which gives user option to either
-	 * search for a toy, add a toy, remove a toy, or save and exit.
-	 * Will tell user an error if they put invalid choice.
-	 * 
-	 */
-	public void run()  {
-		this.printWelcomeMessage();
-		Scanner in = new Scanner(System.in);
-		int choice = -1;
-		while (choice != 4) {
-			try {
-			this.openingChoice();
-			choice = in.nextInt();
-			switch (choice) {
-				case 1:
-					search(in);
-					break;
-				case 2:
-					addToy(in);
-					break;
-				case 3:
-					removeToy(in);
-					break;
-				case 4:
-					exit();
-					break;
-				default:
-					System.out.println("ERROR: Wrong Choice");
+				if (toyType(SN) == "A") {
+					Toys Animals = new Animals(splittedLine[0], splittedLine[1], splittedLine[2],
+							Double.parseDouble(splittedLine[3]), Integer.parseInt(splittedLine[4]),
+							Integer.parseInt(splittedLine[5]), splittedLine[6], splittedLine[7]);
+					toys.add(Animals);
+				}
+				if (toyType(SN) == "P") {
+					Toys Puzzle = new Puzzles(splittedLine[0], splittedLine[1], splittedLine[2],
+							Double.parseDouble(splittedLine[3]), Integer.parseInt(splittedLine[4]),
+							Integer.parseInt(splittedLine[5]), splittedLine[6]);
+					toys.add(Puzzle);
+				}
+				if (toyType(SN) == "B") {
+					Toys BoardGame = new BoardGames(splittedLine[0], splittedLine[1], splittedLine[2],
+							Double.parseDouble(splittedLine[3]), Integer.parseInt(splittedLine[4]),
+							Integer.parseInt(splittedLine[5]), splittedLine[6], splittedLine[7]);
+					toys.add(BoardGame);
+
+				}
 			}
 
-		}catch (InputMismatchException ex) {
-			System.out.println("ERROR: This is not an integer. Please try again");
-			in.nextLine();
-		} catch (PriceException nx) {
-			System.out.println("ERROR: " + nx.getMessage());
-		}
-	}
-		in.close();
-		System.out.println("Thank you");
-	}
-
-	/**
-	 * Prints the "header"
-	 */
-	private void printWelcomeMessage() {
-		System.out.println("******************************************");
-		System.out.println("*******    WELCOME TO TOY STORE    *******");
-		System.out.println("******************************************");
-	}
-	
-	/**
-	 * Prints the Main Menu
-	 */
-	private void openingChoice() {
-		System.out.println("\nHow we may help you?\n");
-		System.out.println("1) Search Inventory and Purchase Toy");
-		System.out.println("2) Add New Toy");
-		System.out.println("3) Remove Toy");
-		System.out.println("4) Save & Exit");
-		System.out.print("\nEnter Option: ");
-	}
-	
-	/**
-	 * Prints the SUb Menu
-	 */
-	private void printFindToysMenu() {
-		System.out.println("\nFind Toys With:\n");
-		System.out.println("1) Serial Number(SN)");
-		System.out.println("2) Toy Name");
-		System.out.println("3) Type");
-		System.out.println("4) Back to Main Menu");
-		System.out.print("\nEnter Option: ");
-	}
-	
-	/**
-	 * Prints out the things that were asked for
-	 */
-	public void printInventory() {
-		for (Toys toy: toys) {
-			System.out.println(toy);
+			// closing the filereader
+			fileReader.close();
 		}
 	}
 	
+	
 	/**
-	 * Used to search the file for the serial number
-	 * @param sn the serial number of the toy
-	 * @param purchase the purchase price of the toy
-	 * @param in the users input
-	 * @param print sees if the it can print
-	 * @return
+	 * This method searches the serial number of toy
+	 * @param serialNum - serial number of toy
+	 * @return toy
 	 */
-	private Toys searchBySN(long sn, boolean purchase, Scanner in, boolean print) {
-		for (Toys toy: toys) {
-			if (toy.getSerialNo() == sn) {
-				if (print) {
-					System.out.println("1) " + toy.toString());
-				}
-				System.out.println("1) " + toy.toString());
-				if (purchase) {
-					System.out.println("2) Back to Search Menu");
-					System.out.print("\n Enter Option Number to Purchase: ");
-					int optionNumber = in.nextInt();
-					if (optionNumber != 2) {
-						this.buyItem(toy);
-					}
-					System.out.println("\nPress enter to Continue");
-					in.nextLine();
-				}
-				return toy;
+	public Toys searchSerialNo(String serialNo) {
+		Toys toy = null;
+		for (Toys t : toys) {
+			if (t.getSerialNo().equals(serialNo)) {
+				toy = t;
+				break;
 			}
 		}
-		if (print) {
-			System.out.println("ERROR: No Toy Found");
+		return toy;
+	}
+	
+	/**
+	 * This method checks if there is a repeated serial number being added
+	 * @param serialNum - serial number of toy
+	 * @return repeatedSerialNum
+	 * @throws Exception
+	 */
+	public boolean repeatedSerialNo(String serialNo) throws Exception {
+		boolean repeatedSerialNo = false;
+		String savedSerialNo = "0";
+		int i = 0;
+		while (i < toys.size()) {
+			savedSerialNo = toys.get(i).getSerialNo();
+			if (savedSerialNo.equals(serialNo)) {
+				repeatedSerialNo = true;
+			}
+			i++;
 		}
-		return null;
+		return repeatedSerialNo;
+
 	}
 	
 	/**
 	 *  Used to search the file for the name
 	 * @param name of the toy
 	 * @param in the users input
+	 * @return 
 	 */
-	private void searchByName(String name, Scanner in) {
-		boolean found = false;
-		int index = 0;
-		HashMap<Integer, Toys> result = new HashMap<>();
-		for (Toys toy: toys) {
-			if (toy.getName().toLowerCase().contains(name.toLowerCase())) {
-				index++;
-				System.out.println(index + ") " + toy.toString());
-				result.put(index, toy);
-				found = true;
+	public String searchByName(String name) {
+		Toys toy = null;
+		String output = "";
+		for (Toys t1 : toys) {
+			if ((t1.getName().toUpperCase()).contains(name.toUpperCase())) {
+				toy = t1;
+				output = output + "\n" + toy.toString();
+			
 			}
+			
 		}
-		if (!found) {
-			System.out.println("ERROR: No Toy Found");
-		} else {
-			index++;
-			System.out.println(index + ") Back to Search Menu");
-			System.out.print("\nEnter Option Number to Purchase: ");
-			int optionNumber = in.nextInt();
-			if (result.containsKey(optionNumber)) {
-				Toys toy = result.get(optionNumber);
-				this.buyItem(toy);
-			}
-			System.out.println("\nPress Any Key to Continue");
-			in.nextLine();
-		}
+		return output;
 	}
 	
+	
 	/**
-	 *  Purchased the toy that is selected
-	 * @param toy that is selected
+	 * This method searches the type of toy
+	 * @param choice
+	 * @return output
 	 */
-	private void buyItem(Toys toy) {
-		if (toy.getAvaliableCount() > 0) {
-			toy.decrementStock();
-			System.out.println("The Transaction Successfully Terminated!!!");
-		} else {
-			System.out.println("ERROR: Item Out of Stock");
+	public String searchByType(String choice) {
+		String result = "Matches Found:";
+		int i;
+		char typeOfToy = choice.toUpperCase().charAt(0);
+		if (typeOfToy == 'A') {
+			i = 0;
+			while (i < toys.size()) {
+				if (toys.get(i) instanceof Animals) {
+					Animals a = (Animals) toys.get(i);
+					result = result + "\n" + a.toString();
+				}
+				i++;
+			}
 		}
+		if (typeOfToy == 'B') {
+			i = 0;
+			while (i < toys.size()) {
+				if (toys.get(i) instanceof BoardGames) {
+					BoardGames bg = (BoardGames) toys.get(i);
+					result = result + "\n" + bg.toString();
+				}
+				i++;
+			}
+		}
+		if (typeOfToy == 'F') {
+			i = 0;
+			while (i < toys.size()) {
+
+				if (toys.get(i) instanceof Figures) {
+					Figures f = (Figures) toys.get(i);
+					result = result + "\n" + f.toString();
+				}
+				i++;
+			}
+		}
+		if (typeOfToy == 'P') {
+			i = 0;
+			while (i < toys.size()) {
+
+				if (toys.get(i) instanceof Puzzles) {
+					Puzzles p = (Puzzles) toys.get(i);
+					result = result + "\n" + p.toString();
+				}
+				i++;
+			}
+		}
+		if (typeOfToy != 'P' && typeOfToy != 'F' && typeOfToy != 'B' && typeOfToy != 'A') {
+			result = "Please Enter a Valid Toy Type, the valid types are\n(A)nimal\n(B)oard Game\n(F)igure\n(P)uzzle";
+		}
+		return result;
 	}
+	
+	
 	
 	/**
 	 * Used to search the file for the type
 	 * @param type that is selected
 	 * @param in the users input
 	 */
-	private void searchByType(String type, Scanner in) {
-		long min = 0L;
-		long max = 0L;
-		
-		if(type.toLowerCase().equals("animals")) {
-			min = 2000000000L;
-			max = 4000000000L;
-		} else if (type.toLowerCase().equals("figures")) {
-			min = 0L;
-			max = 2000000000L;
-		} else if (type.toLowerCase().equals("puzzles")) {
-			min = 4000000000L;
-			max = 7000000000L;
-		} else if (type.toLowerCase().equals("board games")) {
-			min = 7000000000L;
-			max = 10000000000L;
-		} else {
-			System.out.println("ERROR: Type has to be one of animals, figures, puzzles or board games");
-			System.out.println("Press any key to continue");
-			return;
+	public String toyType(char serialNo) {
+		String toyType = null;
+		switch (serialNo) {
+		case '0':
+		case '1':
+			toyType = "F";
+			break;
+		case '2':
+		case '3':
+			toyType = "A";
+			break;
+		case '4':
+		case '5':
+		case '6':
+			toyType = "P";
+			break;
+		case '7':
+		case '8':
+		case '9':
+			toyType = "B";
+			break;
 		}
-		boolean found = false;
-		int index = 0;
-		HashMap<Integer, Toys> result = new HashMap<>();
-		for (Toys toy: toys) {
-			if (toy.getSerialNo() >= min && toy.getSerialNo() < max) {
-				index++;
-				System.out.println(index + ") " + toy.toString());
-				result.put(index, toy);
-				found = true;
-			}
-		}
-		if (!found) {
-			System.out.println("ERROR: No Toy Found");
-		} else {
-			index++;
-			System.out.println(index + ") Back to Search Menu");
-			System.out.print("\n Enter Option Number to Purchase: ");
-			int optionNumber = in.nextInt();
-			if (result.containsKey(optionNumber)) {
-				Toys toy = result.get(optionNumber);
-				this.buyItem(toy);
-			}
-			System.out.println("\nPress Any Key to Continue");
-			in.nextLine();
-		}
+		return toyType;
+	}
+	
+	
+	/**
+	 * This method adds the figure toy to the inventory of toys
+	 * @param serialNum - serial number of toy
+	 * @param toyName - name of toy
+	 * @param toyBrand - brand of toy
+	 * @param price - price of toy
+	 * @param toyAmount - amount available of toy
+	 * @param ageGroup - age recommended for toy
+	 * @param type - type of toy
+	 */
+	public void addFigure(String serialNo, String name, String brand, double price, int avaliableCount, int ageAppropriate, String Class) {
+		Toys Figure = new Figures(serialNo, name, brand, price, avaliableCount, ageAppropriate, Class);
+		toys.add(Figure);
+	}
+
+	/**
+	 * This method adds animal toy to the inventory of toys
+	 * @param serialNum - serial number of toy
+	 * @param toyName - name of toy
+	 * @param toyBrand - brand of toy
+	 * @param price - price of toy
+	 * @param toyAmount - amount available of toy
+	 * @param ageGroup - age recommended for toy
+	 * @param material - material of toy
+	 * @param Size - size of toy
+	 */
+	public void addAnimal(String serialNo, String name, String brand, double price, int avaliableCount, int ageAppropriate, String material,
+			String sz) {
+		Toys Animals = new Animals(serialNo, name, brand, price, avaliableCount, ageAppropriate, material, sz);
+		toys.add(Animals);
+	}
+
+	
+	
+	/**
+	 * This method adds puzzle toy to the inventory of toys
+	* @param serialNum - serial number of toy
+	 * @param toyName - name of toy
+	 * @param toyBrand - brand of toy
+	 * @param price - price of toy
+	 * @param count - amount available of toy
+	 * @param ageGroup - age recommended for toy
+	 * @param type - type of toy
+	 */
+	public void addPuzzle(String serialNo, String name, String brand, double price, int avaliableCount, int ageAppropriate, String puzzleT) {
+		Toys Puzzle = new Puzzles(serialNo, name, brand, price, avaliableCount, ageAppropriate, puzzleT);
+		toys.add(Puzzle);
+	}
+
+	
+	/**
+	 * This method adds the boardgame to the inventory of toys
+	 * @param serialNum
+	 * @param toyName
+	 * @param toyBrand
+	 * @param price
+	 * @param toyAmount
+	 * @param ageGroup
+	 * @param numPlayers
+	 * @param designer
+	 */
+	public void addBoardGame(String serialNo, String name, String brand, double price, int avaliableCount, int ageAppropriate, String noOfPlayers,
+			String designer) {
+		Toys BoardGame = new BoardGames(serialNo, name, brand, price, avaliableCount, ageAppropriate, noOfPlayers, designer);
+		toys.add(BoardGame);
 	}
 	
 	/**
-	 * Where searches lead to
-	 * @param in the users input
+	 * This method removes the toy using serial number
+	 * @param serialNum
 	 */
-	private void search(Scanner in) {
-		int choice = -1;
-		while (choice != 4) {
-			this.printFindToysMenu();
-			choice = in.nextInt();
-			switch (choice) {
-			case 1:
-				System.out.print("Enter serial number: ");
-				searchBySN(Long.parseLong(in.next()), true, in, true);
-				break;
-			case 2:
-				System.out.print("Enter toy name: ");
-				searchByName(in.next(), in);
-				break;
-			case 3:
-				in.nextLine();
-				System.out.print("Enter toy type: ");
-				searchByType(in.nextLine(), in);
-				break;
-			case 4:
-				break;
-			default:
-				System.out.println("ERROR: Wrong Choice. Try Again.");
-				break;
+	public void RemoveToy(String serialNum) {
+		int i = 0;
+		while (i < toys.size()) {
+			String savedSerialNum = toys.get(i).getSerialNo();
+			if (savedSerialNum.equals(serialNum)) {
+				toys.remove(i);
 			}
-			in.nextLine();
-		}
-	}
-	
-	/**
-	 * Adds a new toy to the file
-	 * @param in the users input
-	 * @throws PriceException
-	 */
-	private void addToy(Scanner in) throws PriceException {
-		in.nextLine();
-		System.out.print("Enter Serial Number: ");
-		String serialNumber = in.nextLine();
-		long sn = 0L;
-		try {
-			sn = Long.parseLong(serialNumber);
-			if (searchBySN(sn, false, in, false) != null) {
-				System.out.println("ERROR: A toy with this serial number already exists.");
-				return;
-			}
-			if (sn > 9999999999L || sn < 1000000000L) {
-				System.out.println("ERROR: Serial number can only be 10 digits long.");
-				return;
-			}
-		} catch (NumberFormatException ex) {
-			System.out.println("ERROR: The serial number should only contain digits.");
-			return;
-		}
-		
-		System.out.print("Enter Toy Name: ");
-		String name = in.nextLine();
-		System.out.print("Enter Toy Brand: ");
-		String brand = in.nextLine();
-		System.out.print("Enter Toy Price: ");
-		Double price = Double.parseDouble(in.nextLine());
-		if (price < 0) {
-			throw new PriceException("Price can not be negative");
-		}
-		System.out.print("Enter Available Count: ");
-		Integer count = Integer.parseInt(in.nextLine());
-		System.out.print("Enter Age Appropriate: ");
-		String ageAppropriate = in.nextLine();
-		char firstChar = serialNumber.charAt(0);
-		try {
-			switch (firstChar) {
-				case '0':
-				case '1':
-					System.out.print("Enter the figure classification, The classification can either be Action, Doll, or Historic: ");
-					toys.add(new Figures(sn, name, brand, price, count, ageAppropriate, in.nextLine().charAt(0)));
-					break;
-				case '2':
-				case '3':
-					System.out.print("Enter material: ");
-					String material = in.nextLine();
-					System.out.println("Enter size, size can either be Small, Medium or Large: ");
-					toys.add(new Animals(sn, name, brand, price, count, ageAppropriate, material, in.nextLine().charAt(0)));
-					break;
-				case '4':
-				case '5':
-				case '6':
-					System.out.print("Enter puzzle type. The puzzle-type can either be Mechanical, Cryptic, Logic, Trivia, or Riddle: ");
-					toys.add(new Puzzles(sn, name, brand, price, count, ageAppropriate, in.nextLine().charAt(0)));
-					break;
-				case '7':
-				case '8':
-				case '9':
-					System.out.print("Enter minimum number of players: ");
-					int min = Integer.parseInt(in.nextLine());
-					System.out.print("Enter maximum number of players: ");
-					int max = Integer.parseInt(in.nextLine());
-					if (max < min) {
-						throw new MinMaxException("Maximum number of players can not be smaller than minimum");
-					}
-					System.out.println("Enter designer name(s), use ',' to separate names: ");
-					toys.add(new BoardGames(sn, name, brand, price, count, ageAppropriate, min, max, in.nextLine()));
-					break;
-				default:
-					System.out.println("WARNING: Invalid serial number");
-			}
-			System.out.println("\n Toy Added.");
-		} catch (Exception ex) {
-			System.out.println("ERROR: " + ex.getMessage());
-		}
-		System.out.println("Press any key to continue");
-		in.nextLine();
-	}
-	
-	/**
-	 * Removes a toy from the file
-	 * @param in the users input
-	 * @throws NumberFormatException
-	 */
-	private void removeToy(Scanner in) throws NumberFormatException {
-		in.nextLine();
-		System.out.print("Enter Serial Number: ");
-		String serialNumber = in.nextLine();
-		long sn = 0L;
-		try {
-			sn = Long.parseLong(serialNumber);
-			if (sn > 9999999999L || sn < 1000000000L) {
-				System.out.println("ERROR: Serial number can only be 10 digits long.");
-				return;
-			}
-			boolean found = false;
-			for (int i = 0; i < toys.size(); i++) {
-				Toys toy = toys.get(i);
-				if (toy.getSerialNo() == sn) {
-					System.out.println("Item Found:");
-					System.out.println(toy);
-					System.out.println("\n Continue to remove Y/N");
-					found = true;
-					String remove = in.nextLine().toLowerCase();
-					if (remove.equals("Y") || remove.equals("y")) {
-						toys.remove(i);
-						System.out.println("Item removed");
-					}
-					else
-						break;
-				}
-			}
-			if (!found) {
-				System.out.println("Item not found");
-			}
-			
-			System.out.print("Press enter key to continue.");
-			in.nextLine();
-			
-		} catch (NumberFormatException ex) {
-			System.out.println("ERROR: The serial number should only contain digits.");
-			return;
+			i++;
 		}
 	}
 	
 	/**
 	 * Saves the information into the file before terminating the program
 	 */
-	public void exit() {
-		
-		try {
-		    FileWriter fw = new FileWriter(file);
-		    PrintWriter pw = new PrintWriter(fw);
-		    for (Toys toy: toys) {
-		    	  pw.write(toy.Format() + "\n");
-		    }
-		    pw.close();
-		    System.out.println("Successfully wrote to the file.");
-	    } catch (IOException e) {
-	    	System.out.println("ERROR: Writing data to file");
-	    }
+	public void exit() throws IOException {
+		File db = new File(FILE_PATH);
+		PrintWriter pw = new PrintWriter(db);
+		int i = 0;
+		while (i < toys.size()) {
+			if (toys.get(i) instanceof Animals) {
+				Animals Animals = (Animals) toys.get(i);
+				pw.println(Animals.Format());
+			}
+			if (toys.get(i) instanceof BoardGames) {
+				BoardGames BoardGame = (BoardGames) toys.get(i);
+				pw.println(BoardGame.Format());
+			}
+			if (toys.get(i) instanceof Figures) {
+				Figures Figure = (Figures) toys.get(i);
+				pw.println(Figure.Format());
+			}
+			if (toys.get(i) instanceof Puzzles) {
+				Puzzles Puzzle = (Puzzles) toys.get(i);
+				pw.println(Puzzle.Format());
+			}
+			i++;
+		}
+
+		pw.close();
 	}
 }

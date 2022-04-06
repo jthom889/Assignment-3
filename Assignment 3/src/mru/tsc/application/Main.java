@@ -15,7 +15,7 @@ public class Main extends Application
 	@Override
 	public void start(Stage primaryStage) throws Exception 
 	{
-		StoreMenu s = new StoreMenu(null);
+		StoreMenu s = new StoreMenu();
 		SBGUI gui = new SBGUI(primaryStage, s);
 	}
 	

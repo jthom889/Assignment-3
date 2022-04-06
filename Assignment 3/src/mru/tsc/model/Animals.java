@@ -1,68 +1,55 @@
 package mru.tsc.model;
 
-import mru.tsc.model.Toys;
-import mru.tsc.exceptions.SizeException;
-
 public class Animals extends Toys {
 	//variables declared
 	private String material;
-	private Size size;
+	char size;
 	
-	/**
-	 * used enum for size of animals which is either Small, Medium, or Large
-	 * sizes variable declared with Size taking sizes as parameter
-	 */
-	enum Size {
-		Small ("Small"), 
-		Medium ("Medium"), 
-		Large ("Large");
-        private String sizes;
-        private Size(String sizes) {
-            this.sizes = sizes;
-        }
-       
-        @Override
-        /**
-         * Overriding toString method that returns sizes
-         */
-        public String toString(){
-            return this.sizes;
-        }
-	};
+	
+	
     /**
      * this constructor creates the toy of Animal
      * Gives user option what size animal they want
-     * @param serialNum - serial number of toy 
-     * @param toyName - name of toy
-     * @param toyBrand - brand of toy
-     * @param price - price of toy
-     * @param toyAmount - Amount of toys available
-     * @param ageGroup - tells what age group is for toy
+     * @param s - serial number of toy 
+     * @param n - name of toy
+     * @param b - brand of toy
+     * @param p - price of toy
+     * @param aC - Amount of toys available
+     * @param aA - tells what age group is for toy
      * @param material - material of the animal
-     * @param size - size of the animal
+     * @param sz - size of the animal
      */
-    public Animals(long s, String n, String b, double p, int aC, String aA, String material, char size) throws SizeException {
+    public Animals(String s, String n, String b, double p, int aC, int aA, String material, String sz) {
         super(s, n, b, p, aC, aA);
         this.material = material;
-        switch (size) {
-		case 'S':
-			this.size = Size.Small;
-			break;
-		case 'M':
-			this.size = Size.Medium;
-			break;
-		case 'L':
-			this.size = Size.Large;
-			break;
-		default:
-			throw new SizeException("Size has to be one of S, M or L");
-	}
+	     size = sz.charAt(0);
+		
     }
     /**
 	 * @return the material
 	 */
 	public String getMaterial() {
 		return material;
+	}
+	
+	public void setMaterial(String material) {
+		this.material = material;
+	}
+	
+	/**
+	 * gets size of toy
+	 * @return size
+	 */
+	public char getSize() {
+		return size;
+	}
+
+	/**
+	 * setter for size
+	 * @param size
+	 */
+	public void setSize(char size) {
+		this.size = size;
 	}
     
     @Override
@@ -78,6 +65,6 @@ public class Animals extends Toys {
 	 */
     @Override
 	public String Format() {
-		return String.format("%s;%s;%s", super.Format(), this.material, this.size.toString().charAt(0));
+		return String.format("%s;%s;%s", super.Format(), this.material, size);
 	}
 }
