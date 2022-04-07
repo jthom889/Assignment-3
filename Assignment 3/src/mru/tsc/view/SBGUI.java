@@ -7,8 +7,17 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import mru.tsc.controller.StoreMenu;
 
+/**
+ * this class makes the scene for the program
+ */
 public class SBGUI 
 {
+	/**
+	 * this constructor sets the scene for
+	 *  javafx when it is called
+	 * @param primaryStage is the stage
+	 * @param S is the store menu class
+	 */
 	public SBGUI(Stage primaryStage, StoreMenu S)
 	{
 		try 
