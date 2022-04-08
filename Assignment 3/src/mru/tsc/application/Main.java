@@ -3,10 +3,6 @@ package mru.tsc.application;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import mru.tsc.controller.StoreMenu;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import mru.tsc.view.SBGUI;
 
 /**

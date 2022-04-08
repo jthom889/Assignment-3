@@ -1,30 +1,27 @@
 package mru.tsc.view;
 
+import java.util.ArrayList;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-
 import javafx.scene.control.Button;
-
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import mru.tsc.controller.StoreMenu;
 import mru.tsc.exceptions.MinMaxException;
 import mru.tsc.exceptions.PriceException;
 import mru.tsc.model.Toys;
-import javafx.scene.control.TextField;
-
-import java.io.IOException;
-import java.util.ArrayList;
-
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-
-import javafx.scene.control.Label;
-
-import javafx.scene.control.TextArea;
-
-import javafx.scene.control.RadioButton;
-
-import javafx.scene.control.ChoiceBox;
 
 /**
  * this class will tell the fxml file what to do with
@@ -35,6 +32,9 @@ import javafx.scene.control.ChoiceBox;
  *
  */
 public class GUIController {
+	
+	//declaring constant logger variable
+		private final static Logger LOGR = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 	
 	//declaring variables for FXML document
 	ObservableList<String> CategoryList = FXCollections.observableArrayList("Animal", "Board Game", "Figure", "Puzzle");
@@ -112,6 +112,13 @@ public class GUIController {
 	public GUIController() throws Exception {
 		toyItems = new StoreMenu();
 		
+		//setting the variables for logr
+		LogManager.getLogManager().reset();
+		FileHandler fh = new FileHandler("doc/LogFile.log", true);
+		fh.setLevel(Level.ALL);
+		fh.setFormatter(new SimpleFormatter());
+		LOGR.addHandler(fh);
+		
 	}
 	
 	/**
@@ -124,6 +131,7 @@ public class GUIController {
 		nameText.setEditable(false);
 		typeText.setEditable(false);
 		Searchbtn.setDisable(true);
+		LOGR.info("Program Stated Successfully");
 		
 		
 	}
@@ -182,7 +190,7 @@ public class GUIController {
 	/**
 	 * this method is is for when the search button is clicked on the home page
 	 * @param event is the click of the button
-	 * @throws Exception for the repeaed serial number
+	 * @throws Exception for the repeated serial number
 	 */
 	@FXML
 	public void SearchToy(ActionEvent event) throws Exception {
@@ -214,31 +222,34 @@ public class GUIController {
 	
 	/**
 	 * this method adds the toy to the list in the add toy tab
-	 * @throws IOException inside of the exit method
 	 */
-	public void AddToy() throws IOException {
+	public void AddToy(){
 		if (category.getValue().equalsIgnoreCase("Figure")) {
 			toyItems.addFigure(addSN.getText(), addName.getText(), addBrand.getText(),
 					Double.parseDouble(addPrice.getText()), Integer.parseInt(addCount.getText()),
 					Integer.parseInt(addAge.getText()), figClass.getText());
+			LOGR.info("New Figure added");
 		}
 		if (category.getValue().equalsIgnoreCase("Animal")) {
 			toyItems.addAnimal(addSN.getText(), addName.getText(), addBrand.getText(),
 					Double.parseDouble(addPrice.getText()), Integer.parseInt(addCount.getText()),
 					Integer.parseInt(addAge.getText()), animalMat.getText(), animalSize.getText());
+			LOGR.info("New Animal added");
 		}
 		if (category.getValue().equalsIgnoreCase("Puzzle")) {
 			toyItems.addPuzzle(addSN.getText(), addName.getText(), addBrand.getText(),
 					Double.parseDouble(addPrice.getText()), Integer.parseInt(addCount.getText()),
 					Integer.parseInt(addAge.getText()), puzzleType.getText());
+			LOGR.info("New Puzzle added");
 		}
 		if (category.getValue().equalsIgnoreCase("Board Game")) {
 			toyItems.addBoardGame(addSN.getText(), addName.getText(), addBrand.getText(),
 					Double.parseDouble(addPrice.getText()), Integer.parseInt(addCount.getText()),
 					Integer.parseInt(addAge.getText()),
 					bgMin.getText() + "-" + bgMax.getText(), bgDesign.getText());
+			LOGR.info("New Board Game added");
 		}
-		toyItems.exit();
+		LOGR.info("Data Saved Succesfully");
 	}
 	
 	// Event Listener on Button[#removeToy].onAction
@@ -246,7 +257,7 @@ public class GUIController {
 	 * this method listens to the button click from the remove toy 
 	 * button. this method will remove the toy when the button is clicked
 	 * @param event is when the user clicks the button
-	 * @throws Exception for the repeated serial number cmethod
+	 * @throws Exception for the repeated serial number method
 	 */
 		@FXML
 		public void RemoveToy(ActionEvent event) throws Exception {
@@ -256,11 +267,11 @@ public class GUIController {
 				rtList.setText(t.toString() + "\n" + "Toy removed!");
 				
 				toyItems.RemoveToy(rtSN.getText());
-				
-				toyItems.exit();
+				LOGR.info("Toy Removed Succesfully");
 			} else {
 				
 				rtList.setText("No Serial Number found");
+				LOGR.warning("Toy not removed: Serial number not found");
 			}
 		}
 	
@@ -357,6 +368,7 @@ public class GUIController {
 			if (toyItems.repeatedSerialNo(addSN.getText()) == true) {
 				errors = errors + "\n" + "A toy with that SN already exists";
 				errorCheck = false;
+				LOGR.warning("SN already exists");
 			}
 
 			
@@ -365,6 +377,7 @@ public class GUIController {
 			} catch (NumberFormatException e) {
 				errors = errors + "\n" + "Your SN can only contain numbers";
 				errorCheck = false;
+				LOGR.warning("SN contains more than numbers");
 			}
 			
 			if (addSN.getText().length() != 10) {
@@ -383,6 +396,7 @@ public class GUIController {
 			} catch (PriceException e) {
 				errors = errors + "\n" + "You must enter a valid price";
 				errorCheck = false;
+				LOGR.warning("Invalid price given");
 			}
 		}
 
@@ -398,6 +412,7 @@ public class GUIController {
 			} catch (NumberFormatException | PriceException e) {
 				errors = errors + "\n" + "You must enter a valid available amount";
 				errorCheck = false;
+				LOGR.warning("Invalid amount given");
 			}
 		}
 
@@ -407,6 +422,7 @@ public class GUIController {
 		} catch (NumberFormatException e) {
 			errors = errors + "\n" + "You must enter a valid appropriate age";
 			errorCheck = false;
+			LOGR.warning("Invalid age given");
 		}
 
 	
@@ -448,6 +464,7 @@ public class GUIController {
 				} catch (MinMaxException | NumberFormatException e) {
 					errors = errors + "\n" + "Your minimum players cannot be more than your maximum players";
 					errorCheck = false;
+					LOGR.warning("Minimum players exceeds Maximum players");
 				}
 
 			}
