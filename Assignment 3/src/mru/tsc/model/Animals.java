@@ -57,7 +57,8 @@ public class Animals extends Toys {
      * method that returns and tells user animal, material, and size
      */
     public String toString() {
-        return "Category: Animal, " + super.toString() + ", Material: " + this.material + ", Size: " + this.size;
+    	return "Animal = SN:" + serialNo + ", Name:" + name + ", Brand:" + brand + ", Price:" + price + ", Available:"
+				+ avaliableCount + ", Age Group:" + ageAppropriate + ", Material:" + material + ", Size:" + size;
     }
     
     /**
